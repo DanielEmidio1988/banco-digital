@@ -14,12 +14,12 @@ function Router () {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LoginPage/>}/>
-                <Route path="/register" element={<RegisterPage/>}/>
+                <Route path="/cadastro" element={<RegisterPage/>}/>
                 <Route path="/main" element={<HomePage/>}/>
-                <Route path="/deposit" element={<DepositPage/>}/>
-                <Route path="/deposit/:accountId" element={<DepositDetailsPage/>}/>
-                <Route path="/transfer" element={<TransferPage/>}/>
-                <Route path="/transfer/:accountId" element={<TransferDetailsPage/>}/>
+                <Route path="/deposito" element={<DepositPage/>}/>
+                <Route path="/deposito/:accountId" element={<DepositDetailsPage/>}/>
+                <Route path="/transferencia" element={<TransferPage/>}/>
+                <Route path="/transferencia/:accountId" element={<TransferDetailsPage/>}/>
                 <Route path="*" element={<PageNotFound/>}/>
             </Routes>
         </BrowserRouter>

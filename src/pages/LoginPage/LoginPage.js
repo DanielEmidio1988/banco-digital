@@ -1,6 +1,24 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
+import { useState } from 'react'
 
 function LoginPage () {
+
+  // const [account, setAccount] = useState("")
+  // const [password, setPassword] = useState("")
+
+  const [form, setForm] = useState({
+    account: "",
+    password: "",
+  })
+
+  const onChangeForm = (event)=>{
+    setForm({...form, [event.target.name]: event.target.value})
+  }
+
+  const login = ()=>{
+    console.log("Conta: ", form.account)
+    console.log("E-mail: ", form.password)
+  }
 
   return (
     <>
@@ -8,6 +26,7 @@ function LoginPage () {
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
+            {/* ATUALIZAR O LOGO POSTERIORMENTE */}
             <img
               className="mx-auto h-12 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -27,17 +46,19 @@ function LoginPage () {
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
-                <label htmlFor="email-address" className="sr-only">
+                <label htmlFor="account-client" className="sr-only">
                   Insira o número da sua conta
                 </label>
                 <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                  id="account-client"
+                  name="account"
+                  type="text"
+                  autoComplete="off"
                   required
                   className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Insira o número da sua conta"
+                  value={form.account}
+                  onChange={onChangeForm}
                 />
               </div>
               <div>
@@ -48,10 +69,12 @@ function LoginPage () {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="current-password"
+                  autoComplete="off"
                   required
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Insira a sua senha"
+                  value={form.password}
+                  onChange={onChangeForm}
                 />
               </div>
             </div>
@@ -78,6 +101,7 @@ function LoginPage () {
 
             <div>
               <button
+                onClick={login}
                 type="submit"
                 className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
@@ -86,6 +110,16 @@ function LoginPage () {
                 </span>
                 Continuar
               </button>
+            </div>
+            <div>
+
+            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  Não possui uma conta?{" "}
+            
+            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                  {" "}Cadastrar
+            </a></label>
+
             </div>
           </form>
         </div>
