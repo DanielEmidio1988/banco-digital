@@ -44,7 +44,11 @@ function LoginPage () {
 
   const login = (event)=>{
     event.preventDefault()
+    if(form.account !== 1 && form.password !== "123456"){
+      alert("Usuário ou senha inválido!")
+    }else{
     goToHomePage(navigate)
+    }
   }
 
   // const registerUser = (event)=>{
@@ -126,7 +130,7 @@ function LoginPage () {
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                   Não possui uma conta?{" "}
             
-            <a href={goToRegisterPage(navigate)} className="font-medium text-indigo-600 hover:text-indigo-500">
+            <a href={()=>goToRegisterPage(navigate)} className="font-medium text-indigo-600 hover:text-indigo-500">
                   {" "}Cadastrar
             </a></label>
 
