@@ -32,7 +32,44 @@ function HomePage() {
   return (
     <>
     <Header/>
-    <div className="bg-white py-24 sm:py-32 lg:py-40">
+    <div>
+      <div>
+        <div>
+          DEPOSITO
+        </div>
+        <div>
+          TRANSFERÊNCIAS
+        </div>
+        <div>
+          AREA PIX
+        </div>
+        <div>
+          INVESTIMENTOS
+        </div>
+        <div>
+          SEGUROS
+        </div>
+      </div>
+      <div>
+        <div>
+          <h1>USUARIO</h1>
+          <p>Saldo em Conta: R$ 0.00</p>
+        </div>
+        <div>
+          <h3>BEM VINDO USUARIO</h3>
+          <p>Bem Vindo(a) ao Banco Digital!</p>
+          <p></p>
+          <p>Aqui você poderá administrar toda sua movimentação da sua conta bancária, com isenção em todas as taxas.</p>
+          <p></p>
+          <p></p>
+
+
+
+        </div>
+
+      </div>
+    </div>
+    {/* <div className="bg-white py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="sm:text-center">
           <h2 className="text-lg font-semibold leading-8 text-indigo-600">Transações</h2>
@@ -59,7 +96,7 @@ function HomePage() {
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
     </>
   )
 }
