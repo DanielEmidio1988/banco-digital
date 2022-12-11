@@ -1,60 +1,82 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import axios from 'axios'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/url'
 import { goToHomePage, goToRegisterPage } from '../../routes/coordinator'
+import { useForm } from '../../components/useForm'
+import { GlobalContext } from '../../context/GlobalContext'
 
 function LoginPage () {
 
-  const [form, setForm] = useState({
-    account: "",
-    password: "",
-  })
+  // const context = useContext(GlobalContext)
 
+  const [accountUser, onChangeForm] = useForm({cpf:"",password:""})
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  const onChangeForm = (event)=>{
-    setForm({...form, [event.target.name]: event.target.value})
-  }
-
-  // const login = async (event)=>{
-  //   event.preventDefault()
-  //   try{
-  //     setIsLoading(true)
-  //     const body ={
-  //       account: form.account,
-  //       password: form.password
-  //     }
-
-  //     const response = await axios.get(
-  //       `${BASE_URL}/main`, body
-  //     )
-  //      window.localStorage.setItem("tokenBancoDigital", response.data.token)
-  //      goToHomePage(navigate)
-  //      console.log("Deu certo!")
-  //      setIsLoading(false)
-  //   }catch(error){
-  //     console.log("Deu erro!")
-  //     console.log(error)
-  //     setIsLoading(false)
-  //   }
-  // }
-
-  const login = (event)=>{
+  //VERIFICAR O PQ NÃO ESTÁ CONECTANDO
+  const handleClick = async (event)=>{
     event.preventDefault()
-    if(form.account !== 1 && form.password !== "123456"){
-      alert("Usuário ou senha inválido!")
-    }else{
-    goToHomePage(navigate)
+    try{
+      setIsLoading(true)
+      const body = {
+        account: accountUser.account,
+        password: accountUser.password
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/main`, body
+      )
+       window.localStorage.setItem("tokenBancoDigital", response.data.token)
+       goToHomePage(navigate)
+       console.log("Deu certo!")
+       setIsLoading(false)
+    }catch(error){
+      console.log("Deu erro!")
+      console.log(error)
+      setIsLoading(false)
+      console.log("Handleclick", handleClick)
     }
   }
 
-  // const registerUser = (event)=>{
+  // const handleClick = (event) =>{
   //   event.preventDefault()
-  //   goToRegisterPage(navigate)
 
+  //   try{
+  //         setIsLoading(true)
+  //         const body ={
+  //           cpf: accountUser.account,
+  //           password: accountUser.password
+  //         }
+    
+  //         const response = await axios.get(
+  //           `${BASE_URL}/main`, body
+  //         )
+  //          window.localStorage.setItem("tokenBancoDigital", response.data.token)
+  //          goToHomePage(navigate)
+  //          console.log("Deu certo!")
+  //          setIsLoading(false)
+  //       }catch(error){
+  //         console.log("Deu erro!")
+  //         console.log(error)
+  //         setIsLoading(false)
+  //       }
+
+  //   // if(accountUser.cpf !== 1 && accountUser.password !== "123456"){
+  //   //   alert("Usuário ou senha inválido!")
+  //   // }else{
+  //   // goToHomePage(navigate)
+  //   // }
+  // }
+
+  // const handleClick = (event) =>{
+  //   event.preventDefault()
+  //   if(accountUser.cpf !== 1 && accountUser.password !== "123456"){
+  //     alert("Usuário ou senha inválido!")
+  //   }else{
+  //   goToHomePage(navigate)
+  //   }
   // }
 
   return (
@@ -76,7 +98,7 @@ function LoginPage () {
               Insira seus dados para iniciarmos a sessão
             </p>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form onSubmit={handleClick} className="mt-8 space-y-6" action="#" method="POST">
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
@@ -84,14 +106,14 @@ function LoginPage () {
                   Insira o número da sua conta
                 </label>
                 <input
-                  id="account-client"
-                  name="account"
+                  id="cpf-client"
+                  name="cpf"
                   type="text"
                   autoComplete="off"
                   required
                   className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Insira o número da sua conta"
-                  value={form.account}
+                  value={accountUser.cpf}
                   onChange={onChangeForm}
                 />
               </div>
@@ -107,7 +129,7 @@ function LoginPage () {
                   required
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Insira a sua senha"
-                  value={form.password}
+                  value={accountUser.password}
                   onChange={onChangeForm}
                 />
               </div>
@@ -115,7 +137,6 @@ function LoginPage () {
 
             <div>
               <button
-                onClick={login}
                 type="submit"
                 className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
