@@ -1,19 +1,24 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import axios from 'axios'
-import { useContext, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/url'
 import { goToHomePage, goToRegisterPage } from '../../routes/coordinator'
-import { useForm } from '../../components/useForm'
 import { GlobalContext } from '../../context/GlobalContext'
 
 function LoginPage () {
 
-  // const context = useContext(GlobalContext)
-
-  const [accountUser, onChangeForm] = useForm({cpf:"",password:""})
-  const [isLoading, setIsLoading] = useState(false)
+  const context = useContext(GlobalContext)
+  const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
+
+  console.log(accountUser)
+
+  useEffect(() => {
+    if (context.isAuth) {
+        goToHomePage(navigate)
+    }
+})
 
   //VERIFICAR O PQ NÃO ESTÁ CONECTANDO
   const handleClick = async (event)=>{
@@ -21,54 +26,24 @@ function LoginPage () {
     try{
       setIsLoading(true)
       const body = {
-        account: accountUser.account,
+        cpf: accountUser.cpf,
         password: accountUser.password
       }
-
-      const response = await axios.get(
-        `${BASE_URL}/main`, body
+      const response = await axios.post(
+        `${BASE_URL}/user/login`, body
       )
+    
        window.localStorage.setItem("tokenBancoDigital", response.data.token)
-       goToHomePage(navigate)
        console.log("Deu certo!")
        setIsLoading(false)
+       context.setIsAuth(true)
+       goToHomePage(navigate)
     }catch(error){
+      setIsLoading(false)
       console.log("Deu erro!")
       console.log(error)
-      setIsLoading(false)
-      console.log("Handleclick", handleClick)
     }
   }
-
-  // const handleClick = (event) =>{
-  //   event.preventDefault()
-
-  //   try{
-  //         setIsLoading(true)
-  //         const body ={
-  //           cpf: accountUser.account,
-  //           password: accountUser.password
-  //         }
-    
-  //         const response = await axios.get(
-  //           `${BASE_URL}/main`, body
-  //         )
-  //          window.localStorage.setItem("tokenBancoDigital", response.data.token)
-  //          goToHomePage(navigate)
-  //          console.log("Deu certo!")
-  //          setIsLoading(false)
-  //       }catch(error){
-  //         console.log("Deu erro!")
-  //         console.log(error)
-  //         setIsLoading(false)
-  //       }
-
-  //   // if(accountUser.cpf !== 1 && accountUser.password !== "123456"){
-  //   //   alert("Usuário ou senha inválido!")
-  //   // }else{
-  //   // goToHomePage(navigate)
-  //   // }
-  // }
 
   // const handleClick = (event) =>{
   //   event.preventDefault()
@@ -151,7 +126,7 @@ function LoginPage () {
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                   Não possui uma conta?{" "}
             
-            <a href={()=>goToRegisterPage(navigate)} className="font-medium text-indigo-600 hover:text-indigo-500">
+            <a onClick={()=>goToRegisterPage(navigate)} className="font-medium text-indigo-600 hover:text-indigo-500">
                   {" "}Cadastrar
             </a></label>
 

@@ -1,18 +1,17 @@
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 function FinancialRelease(props){
 
-    const [financialValue, setFinancialValue] = useState(0)
-    const navigate = useNavigate()
+  const navigate = useNavigate()
+
 
   function confirmOperationTransaction(event){ 
     event.preventDefault()
-    if(financialValue > 2000){
+    if(props.financialValue > 2000){
         alert(`Valor informado acima limite cadastrado!\nFavor, informar um novo valor.`)
-    }else if(financialValue === 0){
+    }else if(props.financialValue === 0){
         alert(`Favor, informe o valor a ser ${props.financialOperation}`)
-    }else if(financialValue < 0){
+    }else if(props.financialValue < 0){
         alert(`Favor, informe um valor válido`)
     }else{
         props.goToPage(navigate)
@@ -39,8 +38,8 @@ function FinancialRelease(props){
                       
                       <div className="col-span-6 sm:col-span-3">
                         <input
-                          value={financialValue}
-                          onChange={(event)=>setFinancialValue(event.target.value)}  
+                          value={props.financialValue}
+                          onChange={(event)=>props.setFinancialValue(event.target.value)}  
                           type="text"
                           name="first-name"
                           id="first-name"
