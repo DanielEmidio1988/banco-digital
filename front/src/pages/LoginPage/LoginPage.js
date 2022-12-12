@@ -12,11 +12,11 @@ function LoginPage () {
   const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (context.isAuth) {
-        goToHomePage(navigate)
-    }
-})
+//   useEffect(() => {
+//     if (context.isAuth) {
+//         goToHomePage(navigate)
+//     }
+// })
 
   //VERIFICAR O PQ NÃO ESTÁ CONECTANDO
   const handleClick = async (event)=>{
@@ -39,7 +39,6 @@ function LoginPage () {
        window.localStorage.setItem("tokenBancoDigital", response.data.token)
        console.log("Deu certo!")
        setIsLoading(false)
-      //  context.setIsAuth(true)
        goToHomePage(navigate)
     }catch(error){
       setIsLoading(false)
@@ -48,14 +47,6 @@ function LoginPage () {
     }
   }
 
-  // const handleClick = (event) =>{
-  //   event.preventDefault()
-  //   if(accountUser.cpf !== 1 && accountUser.password !== "123456"){
-  //     alert("Usuário ou senha inválido!")
-  //   }else{
-  //   goToHomePage(navigate)
-  //   }
-  // }
 
   return (
     <>
