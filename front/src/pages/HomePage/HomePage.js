@@ -9,8 +9,6 @@ function HomePage() {
 
   const navigate = useNavigate()
 
-
-
   return (
     <>
     <Header/>
