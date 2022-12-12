@@ -5,7 +5,7 @@ import { useForm } from "./components/useForm";
 
 function App() {
 
-  const [accountUser, onChangeForm] = useForm({cpf:"",password:"",accountValue:0})
+  const [accountUser, onChangeForm] = useForm({name:"",cpf:"",password:"",accountValue:0})
   const [isLoading, setIsLoading] = useState(false)
   const [ isAuth, setIsAuth ] = useState(false)
   const [financialValue, setFinancialValue] = useState(0)

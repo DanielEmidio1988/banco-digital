@@ -12,8 +12,6 @@ function LoginPage () {
   const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
 
-  console.log(accountUser)
-
   useEffect(() => {
     if (context.isAuth) {
         goToHomePage(navigate)
@@ -23,8 +21,10 @@ function LoginPage () {
   //VERIFICAR O PQ NÃO ESTÁ CONECTANDO
   const handleClick = async (event)=>{
     event.preventDefault()
+  
     try{
       setIsLoading(true)
+
       const body = {
         cpf: accountUser.cpf,
         password: accountUser.password
@@ -32,11 +32,14 @@ function LoginPage () {
       const response = await axios.post(
         `${BASE_URL}/user/login`, body
       )
+
+      console.log("Body:", body)
+      console.log("response", response)
     
        window.localStorage.setItem("tokenBancoDigital", response.data.token)
        console.log("Deu certo!")
        setIsLoading(false)
-       context.setIsAuth(true)
+      //  context.setIsAuth(true)
        goToHomePage(navigate)
     }catch(error){
       setIsLoading(false)
