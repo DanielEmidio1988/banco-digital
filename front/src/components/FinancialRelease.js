@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom"
-import { LockClosedIcon } from '@heroicons/react/20/solid'
+// import { LockClosedIcon } from '@heroicons/react/20/solid'
 import axios from 'axios'
 import { useContext, useEffect } from 'react'
-import { BASE_URL } from '../../constants/url'
-import { goToHomePage, goToRegisterPage } from '../../routes/coordinator'
-import { GlobalContext } from '../../context/GlobalContext'
+import { BASE_URL } from '../constants/url'
+import { goToHomePage, goToRegisterPage } from '../routes/coordinator'
+import { GlobalContext } from '../context/GlobalContext'
 
 function FinancialRelease(props){
 

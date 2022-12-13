@@ -1,6 +1,9 @@
-import { Fragment } from 'react'
+import { Fragment, useContext } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { goToLoginPage } from '../routes/coordinator'
+import { useNavigate } from 'react-router-dom'
+import { GlobalContext } from '../context/GlobalContext'
 
 const navigation = [
   { name: 'Página Principal', href: '#', current: true },
@@ -13,7 +16,18 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+
+
 export default function Header() {
+
+  const context = useContext(GlobalContext)
+  const navigate = useNavigate()
+
+  function logout (){
+    window.localStorage.removeItem("tokenBancoDigital")
+    goToLoginPage(navigate)
+  }
+
   return (
 
     <Disclosure as="nav" className="bg-gray-800">
@@ -111,7 +125,8 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={logout}
+
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Sair
