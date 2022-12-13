@@ -12,13 +12,6 @@ function LoginPage () {
   const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
 
-//   useEffect(() => {
-//     if (context.isAuth) {
-//         goToHomePage(navigate)
-//     }
-// })
-
-  //VERIFICAR O PQ NÃO ESTÁ CONECTANDO
   const handleClick = async (event)=>{
     event.preventDefault()
   
@@ -29,21 +22,25 @@ function LoginPage () {
         cpf: accountUser.cpf,
         password: accountUser.password
       }
+      
       const response = await axios.post(
         `${BASE_URL}/user/login`, body
       )
-
-      console.log("Body:", body)
-      console.log("response", response)
     
        window.localStorage.setItem("tokenBancoDigital", response.data.token)
-       console.log("Deu certo!")
+       console.log("Login realizado com sucesso!")
+       alert(`Login realizado com sucesso!`)
        setIsLoading(false)
        goToHomePage(navigate)
     }catch(error){
       setIsLoading(false)
-      console.log("Deu erro!")
-      console.log(error)
+      if(error.response.status === 422){
+        alert('CPF ou Senha incorretos!')
+        console.log("CPF ou Senha incorretos!")
+      }
+      alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+      console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+      console.log('Detalhes: ',error)
     }
   }
 

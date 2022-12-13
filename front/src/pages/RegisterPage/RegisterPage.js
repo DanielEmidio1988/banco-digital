@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/url'
 import { goToLoginPage } from '../../routes/coordinator'
@@ -11,35 +11,121 @@ function RegisterPage() {
   const navigate = useNavigate()
   const [validatePassword, setValidatePassword] = useState("")
 
-  const registerUser = async (event)=> {
+  const signup = async (event)  => {
+    // event.preventDefault()
+    const body ={
+      name: accountUser.name,
+      cpf: accountUser.cpf,
+      password: accountUser.password,
+      accountValue: accountUser.accountValue,
+    }
+
+    try{
+      await axios.post(`${BASE_URL}/user/signup`,body)
+      alert(`Conta cadastrada com sucesso!`)
+      setIsLoading(false)
+      goToLoginPage(navigate)
+    }catch(error){
+        alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log('Detalhes: ',error)
+        setIsLoading(false)
+    }
+  }
+
+  const checkDuplicate = async (event)=> {
     event.preventDefault()
+    const body ={
+      name: accountUser.name,
+      cpf: accountUser.cpf,
+      password: accountUser.password,
+      accountValue: accountUser.accountValue,
+    }
     try{
       setIsLoading(true)
-
-      const body ={
-        name: accountUser.name,
-        cpf: accountUser.cpf,
-        password: accountUser.password,
-        accountValue: accountUser.accountValue,
-      }
-
-      const response = await axios.post(`${BASE_URL}/user/signup`,body)
 
       if(validatePassword !== accountUser.password){
         alert(`Senha não confere!`)
         setIsLoading(false)
-        return
+        return  
       }
 
-      window.localStorage.setItem("tokenBancoDigital", response.data.token)
+      await axios.get(`${BASE_URL}/user/${body.cpf}`)
+      alert(`CPF já cadastrado na Base de Dados!`)
       setIsLoading(false)
-      goToLoginPage(navigate)
-
+    
+    return
     }catch(error){
-        console.log(error)
-        setIsLoading(false)
+        if(error.response.status !== 422){
+        alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log('Detalhes: ',error)
+        setIsLoading(false)}
+        else{
+          signup()
+        }
     }
   }
+
+  // if(!confirmDuplicate){
+  //   signup()
+  // }
+
+  // const checkDuplicate = async (event)=> {
+  //   event.preventDefault()
+  //   const body ={
+  //     name: accountUser.name,
+  //     cpf: accountUser.cpf,
+  //     password: accountUser.password,
+  //     accountValue: accountUser.accountValue,
+  //   }
+  //   try{
+  //     setIsLoading(true)
+
+  //     if(validatePassword !== accountUser.password){
+  //       alert(`Senha não confere!`)
+  //       setIsLoading(false)
+  //       return  
+  //     }
+
+  //     const searchAccount = await axios.get(`${BASE_URL}/user/${body.cpf}`)
+  
+  //     if(searchAccount.data.cpf != accountUser.cpf){
+  //       alert('CPF não cadastrado!')
+  //     await axios.post(`${BASE_URL}/user/signup`,body)
+  //     alert(`Conta cadastrada com sucesso!`)
+  //     setIsLoading(false)
+  //     goToLoginPage(navigate)
+  //    }else{
+  //     alert('CPF cadastrado')
+  //     setIsLoading(false)
+      
+  //    }
+
+  //   // if(searchAccount.data.cpf == accountUser.cpf){
+  //   //   alert(`CPF já cadastrado!`)
+  //   //   setIsLoading(false)
+  //   //   return
+
+  //   //  }else{
+
+  //   //   await axios.post(`${BASE_URL}/user/signup`,body)
+  //   //   alert(`Conta cadastrada com sucesso!`)
+  //   //   setIsLoading(false)
+  //   //   goToLoginPage(navigate)
+
+      
+  //   //  }
+    
+  //   return
+  //   }catch(error){
+  //       if(error.response.status !== 422){
+  //       alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+  //       console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+  //       console.log('Detalhes: ',error)
+  //       setIsLoading(false)}
+  //   }
+  // }
 
   const backToLogin =(event) =>{
     event.preventDefault()
@@ -141,7 +227,7 @@ function RegisterPage() {
 
                     <button
                       type="submit"
-                      onClick={registerUser}
+                      onClick={checkDuplicate}
                       className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                       {isLoading ? 'Carregando...':'Salvar'}

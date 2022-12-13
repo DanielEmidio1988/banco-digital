@@ -6,6 +6,8 @@ const cors = require('cors')
 const DB_USER = 'daniel'
 const DB_PASSWORD = encodeURIComponent('#P7mD_Kc67mdYhJ')
 
+app.use(cors())
+
 app.use(
     express.urlencoded({
         extended: true
@@ -24,7 +26,7 @@ app.get('/',(req,res)=>{
 const personRoutes = require('./routes/personRoutes')
 
 app.use('/user',personRoutes)
-app.use(cors())
+
 
 mongoose.set('strictQuery', true)
     mongoose
