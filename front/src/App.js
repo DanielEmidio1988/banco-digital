@@ -5,11 +5,19 @@ import { useForm } from "./components/useForm";
 
 function App() {
 
+  //Daniel: accountUser que será utilizado para armazenar os dados do cliente
   const [accountUser, onChangeForm] = useForm({name:"",cpf:"",password:"",accountValue:0})
+    
+  //Daniel: isLoading será utilizada para status de carregamento (loading) de requisições da Base de Dados
   const [isLoading, setIsLoading] = useState(false)
+
+  //Daniel: isAuth será utilizado para autenticar se o usuário já fez login ou não na página.
   const [ isAuth, setIsAuth ] = useState(false)
+
+  //Daniel: financialValue será utilizado para armazenar valores financeiros como Depósito ou Transferência antes da confirmação da
   const [financialValue, setFinancialValue] = useState(0)
 
+  //Daniel: caso a página seja recarregada e houver um token, o usuário permanecerá na tela.
   useEffect(() => {
       const token = window.localStorage.getItem("tokenBancoDigital")
 

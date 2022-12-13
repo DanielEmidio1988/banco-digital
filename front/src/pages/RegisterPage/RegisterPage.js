@@ -11,6 +11,7 @@ function RegisterPage() {
   const navigate = useNavigate()
   const [validatePassword, setValidatePassword] = useState("")
 
+  //Daniel: Função para cadastrar nova conta, será chamada apenas se não houver CPF duplicado, conforme função "checkDuplicate"
   const signup = async (event)  => {
     // event.preventDefault()
     const body ={
@@ -33,8 +34,10 @@ function RegisterPage() {
     }
   }
 
+//Daniel: função que verificará se há um CPF cadastrado na Base de Dados, que será chamada ao cadastrar (clicando em "Cadastrar")
   const checkDuplicate = async (event)=> {
     event.preventDefault()
+
     const body ={
       name: accountUser.name,
       cpf: accountUser.cpf,
@@ -42,8 +45,10 @@ function RegisterPage() {
       accountValue: accountUser.accountValue,
     }
     try{
+
       setIsLoading(true)
 
+      //Daniel: função para validar se ambas as senhas conferem.
       if(validatePassword !== accountUser.password){
         alert(`Senha não confere!`)
         setIsLoading(false)
@@ -67,66 +72,7 @@ function RegisterPage() {
     }
   }
 
-  // if(!confirmDuplicate){
-  //   signup()
-  // }
-
-  // const checkDuplicate = async (event)=> {
-  //   event.preventDefault()
-  //   const body ={
-  //     name: accountUser.name,
-  //     cpf: accountUser.cpf,
-  //     password: accountUser.password,
-  //     accountValue: accountUser.accountValue,
-  //   }
-  //   try{
-  //     setIsLoading(true)
-
-  //     if(validatePassword !== accountUser.password){
-  //       alert(`Senha não confere!`)
-  //       setIsLoading(false)
-  //       return  
-  //     }
-
-  //     const searchAccount = await axios.get(`${BASE_URL}/user/${body.cpf}`)
-  
-  //     if(searchAccount.data.cpf != accountUser.cpf){
-  //       alert('CPF não cadastrado!')
-  //     await axios.post(`${BASE_URL}/user/signup`,body)
-  //     alert(`Conta cadastrada com sucesso!`)
-  //     setIsLoading(false)
-  //     goToLoginPage(navigate)
-  //    }else{
-  //     alert('CPF cadastrado')
-  //     setIsLoading(false)
-      
-  //    }
-
-  //   // if(searchAccount.data.cpf == accountUser.cpf){
-  //   //   alert(`CPF já cadastrado!`)
-  //   //   setIsLoading(false)
-  //   //   return
-
-  //   //  }else{
-
-  //   //   await axios.post(`${BASE_URL}/user/signup`,body)
-  //   //   alert(`Conta cadastrada com sucesso!`)
-  //   //   setIsLoading(false)
-  //   //   goToLoginPage(navigate)
-
-      
-  //   //  }
-    
-  //   return
-  //   }catch(error){
-  //       if(error.response.status !== 422){
-  //       alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
-  //       console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
-  //       console.log('Detalhes: ',error)
-  //       setIsLoading(false)}
-  //   }
-  // }
-
+  //Daniel: função para retornar a página anterior
   const backToLogin =(event) =>{
     event.preventDefault()
     goToLoginPage(navigate)
@@ -224,13 +170,13 @@ function RegisterPage() {
                     </div>
                   </div>
                   <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-
+                  
                     <button
                       type="submit"
-                      onClick={checkDuplicate}
+                      onClick={checkDuplicate} 
                       className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                      {isLoading ? 'Carregando...':'Salvar'}
+                      {isLoading ? 'Carregando...':'Cadastrar'}
                     </button>
 
                     
