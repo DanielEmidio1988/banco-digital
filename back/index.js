@@ -1,4 +1,5 @@
-//configuração inicial
+//Daniel: configuração inicial
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
@@ -18,7 +19,6 @@ app.use(express.json())
 
 //Daniel: rota de teste de verificação de conexão
 app.get('/',(req,res)=>{
-    //mostra req
     res.json({message: 'Teste de conexão!'})
 })
 
@@ -26,7 +26,6 @@ app.get('/',(req,res)=>{
 const personRoutes = require('./routes/personRoutes')
 
 app.use('/user',personRoutes)
-
 
 mongoose.set('strictQuery', true)
     mongoose
@@ -40,6 +39,3 @@ mongoose.set('strictQuery', true)
         .catch((err)=>{
         console.log(err)
 })
-
-// app.listen(3000)
-// console.log('Deu certo')

@@ -6,11 +6,13 @@ import Header from '../../components/Header'
 import {ContainerMain, MenuOptions, MainDisplay, MainFinancial} from './styleHomePage'
 import { goToDepositPage } from '../../routes/coordinator'
 import { goToTransferPage } from '../../routes/coordinator'
+import { goToLoginPage } from '../../routes/coordinator'
 import { GlobalContext } from '../../context/GlobalContext'
+import { goToHomePage } from '../../routes/coordinator'
 
 function HomePage() {
   const context = useContext(GlobalContext)
-  const {accountUser, setAccountUser} = context
+  const {accountUser, setAccountUser, isAuth} = context
   const navigate = useNavigate()
 
 const searchAccount = async () =>{
@@ -21,6 +23,10 @@ const searchAccount = async () =>{
     try{
       const response = await axios.get(`${BASE_URL}/user/${body.cpf}`)
       setAccountUser(response.data)
+      
+      const tokenBancoDigital = JSON.stringify(response.data)
+      window.localStorage.setItem("tokenBancoDigital", tokenBancoDigital)
+      context.setIsAuth(true)
       return
 
     }catch(error){
@@ -29,6 +35,13 @@ const searchAccount = async () =>{
         console.log(error)
     }
   }
+
+  useEffect(() => {
+    if (!context.isAuth) {
+        window.localStorage.removeItem("tokenBancoDigital")
+        goToLoginPage(navigate)
+    }
+}, [])
 
   useEffect(() => {
     (searchAccount())

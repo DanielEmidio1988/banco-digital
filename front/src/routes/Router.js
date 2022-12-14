@@ -6,7 +6,6 @@ import DepositPage from "../pages/DepositPage/DepositPage"
 import DepositDetailsPage from "../pages/DepositDetailsPage/DepositDetailsPage"
 import TransferPage from "../pages/TransferPage/TransferPage"
 import TransferDetailsPage from "../pages/TransferDetailsPage/TransferDetailsPage"
-import SucessPage from "../pages/SucessPage/SucessPage";
 import PageNotFound from "../pages/PageNotFound/PageNotFound"
 
 
@@ -21,7 +20,6 @@ function Router () {
                 <Route path="/deposito/:accountId" element={<DepositDetailsPage/>}/>
                 <Route path="/transferencia" element={<TransferPage/>}/>
                 <Route path="/transferencia/:accountId" element={<TransferDetailsPage/>}/>
-                <Route path="/operacaoconcluida" element={<SucessPage/>}/>
                 <Route path="*" element={<PageNotFound/>}/>
             </Routes>
         </BrowserRouter>

@@ -1,84 +1,123 @@
 import Header from "../../components/Header"
-import { useState } from "react"
+import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
-import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/url'
-import { goToHomePage } from '../../routes/coordinator'
+import { goToHomePage, goToTransferPage, goToLoginPage } from '../../routes/coordinator'
 import { GlobalContext } from '../../context/GlobalContext'
 
 function TransferDetailsPage() {
 
-// const params = useParams()
-const beneficiaryAccount ={
-  account: "",
-  cpf: "",
+//Daniel: variavel que será utilizada para busca de conta beneficiaria da transferência
+const [searchAccount, setSearchAccount] = useState("")
+
+//Daniel: variável que será utilizada para armazenar os dados da conta beneficiaria da transferência
+const [beneficiaryAccount, setBeneficiaryAccount] = useState({
+  cpf: searchAccount === ""? "": parseInt(searchAccount),
   name: "",
+  accountValue: "",
+  password: ""
+})
+
+const context = useContext(GlobalContext)
+const {accountUser, isLoading, setIsLoading, financialValue, setFinancialValue} = context
+const navigate = useNavigate()
+
+//Daniel: variável que será utilizada para armazenar o valor atual da conta do usuário com o valor transferido
+const newValue = accountUser.accountValue - financialValue
+
+//Daniel: variável que será utilizada para armazenar o valor atual da conta do beneficiário com o valor transferido
+const newValueBeneficiary = beneficiaryAccount.accountValue + financialValue
+
+const searchBeneficiaryAccount = async(event)=> {
+  event.preventDefault()
+
+  try{
+    setIsLoading(true)
+    if(searchAccount == accountUser.cpf){
+      alert(`CPF Inválido. Favor, informar outro número.`)
+      setIsLoading(false)
+      return
+    }
+    const body = {
+      cpf: searchAccount,
+      name: beneficiaryAccount.name,
+      accountValue: beneficiaryAccount.accountValue,
+      password: beneficiaryAccount.password
+    }
+
+    const response = await axios.get(`${BASE_URL}/user/${searchAccount}`,body)
+    setBeneficiaryAccount(response.data)
+    setIsLoading(false)
+    return
+
+  }catch(error){
+    alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+    console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+    console.log('Detalhes: ',error)
+    console.log(error)
+    setIsLoading(false)
+  }
 }
 
-//ALTERAR O NOME DA VARIAVEL
-const [searchAccount, setSearchAccount] = useState("")
-const context = useContext(GlobalContext)
-const {accountUser, isLoading, setIsLoading, onChangeForm, financialValue, setFinancialValue} = context
-const navigate = useNavigate()
-const newValue = financialValue + accountUser.accountValue
+//Daniel: função utilizada para atualizar as informações da conta do usuário
+const confirmTransaction = async (event)=>{
+  event.preventDefault()
 
-// const confirmTransaction = async (event)=>{
-//   event.preventDefault()
-//   try{
-//     setIsLoading(true)
-//   const body = {
-//     accountValue: accountUser.accountValue
-//   }
-//   const response = await axios.patch(`${BASE_URL}/user/${accountUser.cpf}`,body)
-//   window.localStorage.setItem("tokenBancoDigital", response.data.token)
-//   alert(`Operação concluida com sucesso!`)
-//   setFinancialValue(0)
-//   setIsLoading(false)
-//   goToHomePage(navigate)
-// }catch(error){
-//     console.log(error)
-//     setIsLoading(false)
-// }
-// }
+  try{
+    if(financialValue > accountUser.accountValue){    
+      alert(`Você não tem saldo suficiente para esta transação`)
+      return        
+    }
+    
+    setIsLoading(true)
+    const body = {
+      name: accountUser.name,
+      cpf: accountUser.cpf,
+      password: accountUser.password,
+      accountValue: newValue
+    }
 
-// const searchAccount = async (event)=>{
-//   event.preventDefault()
+    await axios.put(`${BASE_URL}/user/${accountUser.cpf}`,body)
+    setFinancialValue(0)
+    confirmTransactionBeneficiary()
 
-//   try{
-//     setIsLoading(true)
+  }catch(error){
+    console.log(error)
+    setIsLoading(false)
+}
+}
 
-//     const body = {
-//       cpf: accountUser.cpf,
-//       password: accountUser.password
-//     }
-//     const response = await axios.post(
-//       `${BASE_URL}/user/login`, body
-//     )
+//Daniel: função utilizada para atualizar as informações da conta do beneficiário
+const confirmTransactionBeneficiary = async ()=>{
 
-//     console.log("Body:", body)
-//     console.log("response", response)
-  
-//      window.localStorage.setItem("tokenBancoDigital", response.data.token)
-//      console.log("Deu certo!")
-//      setIsLoading(false)
-//      goToHomePage(navigate)
-//   }catch(error){
-//     setIsLoading(false)
-//     console.log("Deu erro!")
-//     console.log(error)
-//   }
-// }
+  try{
 
-// function confirmOperation(){
-//   if(searchAccount === beneficiaryAccount.cpf){
-//     setContaBuscada({...beneficiaryAccount})
-//   }else{
-//     alert(`Conta não encontrada!`)
-//     setContaBuscada({})
-//   }
-// }
+    const body = {
+      name: beneficiaryAccount.name,
+      cpf: beneficiaryAccount.cpf,
+      password: beneficiaryAccount.password,
+      accountValue: newValueBeneficiary
+    }
 
+   await axios.put(`${BASE_URL}/user/${beneficiaryAccount.cpf}`,body)
+    // window.localStorage.setItem("tokenBancoDigital", response.data.token)
+    alert(`Operação concluida com sucesso!`)
+    setFinancialValue(0)
+    setIsLoading(false)
+    goToHomePage(navigate)
+  }catch(error){
+    console.log(error)
+    setIsLoading(false)
+}
+}
+
+useEffect(() => {
+  if (!context.isAuth) {
+      window.localStorage.removeItem("tokenBancoDigital")
+      goToLoginPage(navigate)
+  }
+}, [])
 
   return (
     <>
@@ -92,7 +131,7 @@ const newValue = financialValue + accountUser.accountValue
       <div className="px-4 py-5 sm:px-6">
         <p className="mt-1 max-w-2xl text-sm text-gray-900">Informe o nº do CPF do beneficiário</p>
         <input
-            value={beneficiaryAccount}
+            value={searchAccount}
             onChange={(event)=>setSearchAccount(event.target.value)}
             type="text"
             name="first-name"
@@ -102,11 +141,11 @@ const newValue = financialValue + accountUser.accountValue
             className="mt-1 block px-12 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
             <button
-              // onClick={()=>confirmOperation()}
+              onClick={searchBeneficiaryAccount}
               type="submit"
               className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-16 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-                Pesquisar
+                {isLoading ? 'Carregando...':'Pesquisar'}
             </button>
       </div>
       
@@ -122,15 +161,23 @@ const newValue = financialValue + accountUser.accountValue
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Valor de Transferência</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$120,000</dd>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">R$ {financialValue}</dd>
           </div>
           <div className="bg-gray-50 px-4 py-6 text-center sm:px-6">
             <button
                 type="submit"
-                // onClick={confirmTransaction}
+                onClick={()=>goToTransferPage(navigate)}
+                className="mr-20 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-16 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+                Voltar
+            </button>
+
+            <button
+                type="submit"
+                onClick={confirmTransaction}
                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-16 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-                Avançar
+                {isLoading ? 'Carregando...':'Transferir'}
             </button>
           </div>
 

@@ -1,6 +1,6 @@
 # Banco Digital
 
-## 📄 Introdução
+## 📖 Introdução
 
 Este projeto foi desenvolvido com o propósito de simular a administração de uma conta bancária entre usuários, onde você poderá criar sua conta e gerenciar suas transações financeiras como Transferência e Deposito.
 
@@ -11,7 +11,7 @@ Este projeto foi desenvolvido com o propósito de simular a administração de u
 . Por questão de segurança, cada transação não pode ultrapassar R$ 2.000, assim como não há possibilidade de movimentação financeira com valores negativos;
 . Para efeito de teste, poderá ser feito transferencia com o cliente 'Daniel' que possui o CPF 12345678910.
 
-## ⚒️ Tecnologias 
+## 💻 Tecnologias 
 
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
@@ -24,11 +24,15 @@ Este projeto foi desenvolvido com o propósito de simular a administração de u
 
 ## ⚒️ Livrarias Utilizadas
 
+### Todo Sistema
+- npm install
+
 ### Front-End
 - npm install styled-components
 - npm install axios
 - npm install react-router-react
 - npm install tailwindcss/forms
+- npm install jsonwebtoken
 
 ### Back-End
 - npm install cors
