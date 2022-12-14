@@ -88,7 +88,7 @@ router.post("/login", async (req, res)=>{
 
 
 //Daniel: atualiza Cadastro
-router.patch('/:id', async (req, res)=>{
+router.put('/:id', async (req, res)=>{
     //alterar para PersonCPF ou algo assim
     const id = req.body.cpf
     const {name, cpf, accountValue, password} = req.body
@@ -103,12 +103,12 @@ router.patch('/:id', async (req, res)=>{
     }
 
     try{
-        const updatedPerson = await Person.updateOne({cpf:id},person)
         
-        if(updatedPerson.matchedCount === 0){
-            res.status(422).json({message:"Atualização não aconteceu"})
-            return
-        }
+        await Person.updateOne({cpf:id},person)
+        // if(updatedPerson.matchedCount === 0){
+        //     res.status(422).json({message:"Atualização não aconteceu AGORA"})
+        //     return
+        // }
 
         res.status(200).json({message:"Atualização realizada com sucesso!"})
 

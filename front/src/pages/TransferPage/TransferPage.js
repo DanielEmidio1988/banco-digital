@@ -1,17 +1,23 @@
 import Header from "../../components/Header"
 import FinancialRelease from '../../components/FinancialRelease'
 import { goToTransferDetailsPage } from "../../routes/coordinator"
+import { GlobalContext } from '../../context/GlobalContext'
+import { useContext } from 'react'
 
 function TransferPage (){
   const financialOperation = "transferido"
-  const taxaOperacional = 0 //Aplicavel somente em caso de atualização da negociação de taxas
+  const context = useContext(GlobalContext)
+  const {financialValue, setFinancialValue, accountUser} = context
 
     return(
         <>
         <Header/>
         <FinancialRelease
         financialOperation={financialOperation}
-        goToPage={goToTransferDetailsPage}/>       
+        goToPage={goToTransferDetailsPage}
+        financialValue={financialValue}
+        setFinancialValue={setFinancialValue}
+        accountUser={accountUser}/>       
         </>
     )
 }

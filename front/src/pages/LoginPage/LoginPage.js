@@ -1,17 +1,18 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import axios from 'axios'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/url'
 import { goToHomePage, goToRegisterPage } from '../../routes/coordinator'
 import { GlobalContext } from '../../context/GlobalContext'
 
 function LoginPage () {
-
   const context = useContext(GlobalContext)
   const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
 
+
+  //Daniel: função que será ativa quando o formulário de login for submetido, puxando todas as informações que forem inseridas dentro dele.
   const handleClick = async (event)=>{
     event.preventDefault()
   
@@ -19,13 +20,17 @@ function LoginPage () {
       setIsLoading(true)
 
       const body = {
+        name: accountUser.name,
         cpf: accountUser.cpf,
-        password: accountUser.password
+        password: accountUser.password,
+        accountValue: accountUser.accountValue,
       }
       
       const response = await axios.post(
         `${BASE_URL}/user/login`, body
       )
+      //Vai exibir o mesmo da linha 36
+      console.log('response', response.data)
     
        window.localStorage.setItem("tokenBancoDigital", response.data.token)
        console.log("Login realizado com sucesso!")
@@ -43,6 +48,8 @@ function LoginPage () {
       console.log('Detalhes: ',error)
     }
   }
+
+  
 
 
   return (
@@ -64,6 +71,8 @@ function LoginPage () {
               Insira seus dados para iniciarmos a sessão
             </p>
           </div>
+
+          {/* Daniel: formulário de login */}
           <form onSubmit={handleClick} className="mt-8 space-y-6" action="#" method="POST">
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md shadow-sm">

@@ -1,13 +1,38 @@
-// import { BoltIcon, DevicePhoneMobileIcon, GlobeAltIcon, ScaleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { BASE_URL } from '../../constants/url'
+import { useContext, useEffect} from 'react'
 import Header from '../../components/Header'
 import {ContainerMain, MenuOptions, MainDisplay, MainFinancial} from './styleHomePage'
 import { goToDepositPage } from '../../routes/coordinator'
 import { goToTransferPage } from '../../routes/coordinator'
+import { GlobalContext } from '../../context/GlobalContext'
 
 function HomePage() {
-
+  const context = useContext(GlobalContext)
+  const {accountUser, setAccountUser} = context
   const navigate = useNavigate()
+
+const searchAccount = async () =>{
+    const body ={
+      cpf: accountUser.cpf,
+    }
+    
+    try{
+      const response = await axios.get(`${BASE_URL}/user/${body.cpf}`)
+      setAccountUser(response.data)
+      return
+
+    }catch(error){
+        console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log('Detalhes: ',error)
+        console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    (searchAccount())
+}, [])
 
   return (
     <>
@@ -34,8 +59,8 @@ function HomePage() {
       <MainDisplay>
         <div>
           <h1>ÁREA EXCLUSIVA</h1>
-          <p>Olá, Usuário</p>
-          <p>Saldo em Conta: R$ 0.00</p>
+          <p>Olá, {accountUser.name}</p>
+          <p>Saldo em Conta: R$ {accountUser.accountValue}</p>
         </div>
         <MainFinancial>
           <div>
