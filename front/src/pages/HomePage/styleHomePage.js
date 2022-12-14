@@ -4,7 +4,7 @@ export const ContainerMain = styled.div`
     display: flex;
     width: 100%;
     height: 100vh;
-    background-color: lightgray;
+    background-color: white;
 `
 export const MenuOptions = styled.div`
     width: 200px;
@@ -13,6 +13,7 @@ export const MenuOptions = styled.div`
     margin-left: 10px;
     margin-top: 20px;
     border-radius: 8px;
+    box-shadow: 1px 2px 6px lightgray;
 
     p{
         margin-bottom: 12px;
@@ -35,6 +36,7 @@ export const MainDisplay = styled.div`
     border-radius: 8px;
     padding-left: 20px;
     padding-top: 10px;
+    box-shadow: 1px 2px 6px lightgray;
 
     h1{
         font-size: 30px;

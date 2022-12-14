@@ -1,23 +1,22 @@
 import Header from "../../components/Header"
 import axios from 'axios'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/url'
-import { goToHomePage } from '../../routes/coordinator'
+import { goToDepositPage, goToHomePage, goToLoginPage } from '../../routes/coordinator'
 import { GlobalContext } from '../../context/GlobalContext'
 
 function DepositDetailsPage (){
     const context = useContext(GlobalContext)
-    const {accountUser, setAccountUser, isLoading, setIsLoading, financialValue, setFinancialValue} = context
+    const {accountUser, isLoading, setIsLoading, financialValue, setFinancialValue} = context
     const navigate = useNavigate()
-    const newValue = financialValue + accountUser.accountValue
 
+    //Daniel: variável que será utilizada para armazenar o valor atual da conta do usuário com o valor depositado
+    const newValue =  accountUser.accountValue + financialValue
 
-    // financialValue > 0? setNewValue(financialValue + accountUser.accountValue):0
-
+    //Daniel: função para confirmar a transação de depósito na conta do usuário
     const confirmTransaction = async (event)=>{
       event.preventDefault()
-
 
       try{
 
@@ -29,24 +28,28 @@ function DepositDetailsPage (){
           accountValue: newValue
         }
 
-        const response = await axios.put(`${BASE_URL}/user/${accountUser.cpf}`,body)
-        // window.localStorage.setItem("tokenBancoDigital", response.data.token)
+        await axios.put(`${BASE_URL}/user/${accountUser.cpf}`,body)
         alert(`Operação concluida com sucesso!`)
-        console.log("body.accountValue",body)
-        console.log("newValue",newValue)
-        console.log('response',response)
         setFinancialValue(0)
-        // setAccountUser(response.data)
         setIsLoading(false)
         goToHomePage(navigate)
+
       }catch(error){
+        alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
+        console.log('Detalhes: ',error)
         console.log(error)
         setIsLoading(false)
     }
     }
 
-    // financialValue + accountUser.accountValue
-
+    useEffect(() => {
+      if (!context.isAuth) {
+          window.localStorage.removeItem("tokenBancoDigital")
+          goToLoginPage(navigate)
+      }
+  }, [])
+  
     return(
         <>
     <>
@@ -76,12 +79,20 @@ function DepositDetailsPage (){
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">R$ {newValue}</dd>
           </div>
           <div className="bg-gray-50 px-4 py-6 text-center sm:px-6">
+          <button
+                type="submit"
+                onClick={()=>goToDepositPage(navigate)}
+                className="mr-20 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-16 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+                Voltar
+            </button>
+
             <button
                 type="submit"
                 onClick={confirmTransaction}
                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-16 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-                {isLoading ? 'Carregando...':'Avançar'}
+                {isLoading ? 'Carregando...':'Depositar'}
             </button>
           </div>
 

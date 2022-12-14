@@ -19,7 +19,7 @@ function App() {
 
   //Daniel: caso a página seja recarregada e houver um token, o usuário permanecerá na tela.
   useEffect(() => {
-      const token = window.localStorage.getItem("tokenBancoDigital")
+      const token = JSON.parse(window.localStorage.getItem("tokenBancoDigital"))
 
       if (token) {
           setIsAuth(true)

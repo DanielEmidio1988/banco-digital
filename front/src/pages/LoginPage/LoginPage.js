@@ -8,37 +8,31 @@ import { GlobalContext } from '../../context/GlobalContext'
 
 function LoginPage () {
   const context = useContext(GlobalContext)
-  const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
-
 
   //Daniel: função que será ativa quando o formulário de login for submetido, puxando todas as informações que forem inseridas dentro dele.
   const handleClick = async (event)=>{
     event.preventDefault()
   
     try{
-      setIsLoading(true)
+      context.setIsLoading(true)
 
       const body = {
-        name: accountUser.name,
-        cpf: accountUser.cpf,
-        password: accountUser.password,
-        accountValue: accountUser.accountValue,
+        name: context.accountUser.name,
+        cpf: context.accountUser.cpf,
+        password: context.accountUser.password,
+        accountValue: context.accountUser.accountValue,
       }
       
-      const response = await axios.post(
+      await axios.post(
         `${BASE_URL}/user/login`, body
       )
-      //Vai exibir o mesmo da linha 36
-      console.log('response', response.data)
-    
-       window.localStorage.setItem("tokenBancoDigital", response.data.token)
-       console.log("Login realizado com sucesso!")
        alert(`Login realizado com sucesso!`)
-       setIsLoading(false)
+       context.setIsLoading(false)
+       context.setIsAuth(true)
        goToHomePage(navigate)
     }catch(error){
-      setIsLoading(false)
+      context.setIsLoading(false)
       if(error.response.status === 422){
         alert('CPF ou Senha incorretos!')
         console.log("CPF ou Senha incorretos!")
@@ -49,16 +43,12 @@ function LoginPage () {
     }
   }
 
-  
-
-
   return (
     <>
 
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
-            {/* ATUALIZAR O LOGO POSTERIORMENTE */}
             <img
               className="mx-auto h-12 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -88,8 +78,8 @@ function LoginPage () {
                   required
                   className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Insira o número da sua conta"
-                  value={accountUser.cpf}
-                  onChange={onChangeForm}
+                  value={context.accountUser.cpf}
+                  onChange={context.onChangeForm}
                 />
               </div>
               <div>
@@ -104,8 +94,8 @@ function LoginPage () {
                   required
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Insira a sua senha"
-                  value={accountUser.password}
-                  onChange={onChangeForm}
+                  value={context.accountUser.password}
+                  onChange={context.onChangeForm}
                 />
               </div>
             </div>
@@ -118,7 +108,7 @@ function LoginPage () {
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
-                {isLoading ? "Carregando..." : "Continuar"}
+                {context.isLoading ? "Carregando..." : "Continuar"}
               </button>
             </div>
             <div>

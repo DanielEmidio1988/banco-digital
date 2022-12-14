@@ -1,13 +1,22 @@
 import Header from '../../components/Header'
 import FinancialRelease from '../../components/FinancialRelease'
 import { goToDepositDetailsPage } from '../../routes/coordinator'
+import { goToHomePage, goToLoginPage } from '../../routes/coordinator'
 import { GlobalContext } from '../../context/GlobalContext'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function DepositPage (){
   const financialOperation = "depositado"
   const context = useContext(GlobalContext)
-  const {financialValue, setFinancialValue, accountUser} = context
+  const navigate = useNavigate()
+
+    useEffect(() => {
+    if (!context.isAuth) {
+        window.localStorage.removeItem("tokenBancoDigital")
+        goToLoginPage(navigate)
+    }
+    }, [])
 
     return(
         <>
@@ -15,9 +24,10 @@ function DepositPage (){
         <FinancialRelease
         financialOperation={financialOperation}
         goToPage={goToDepositDetailsPage}
-        financialValue={financialValue}
-        setFinancialValue={setFinancialValue}
-        accountUser={accountUser}/>
+        goToBackPage={goToHomePage}
+        financialValue={context.financialValue}
+        setFinancialValue={context.setFinancialValue}
+        accountUser={context.accountUser}/>
         </>
     )
 }

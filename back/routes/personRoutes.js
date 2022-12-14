@@ -29,7 +29,7 @@ router.post('/signup', async (req, res)=>{
     }
 })
 
-//Resgatar contas de usuários
+//Daniel: Resgatar contas de usuários
 router.get('/all', async (req, res) => {
     try{
         const accounts = await Person.find()
@@ -43,8 +43,8 @@ router.get('/all', async (req, res) => {
     }
 })
 
-//================
 
+//Daniel: busca usuário pelo CPF
 router.get('/:id', async (req, res)=>{
     const cpf = req.params.id
 
@@ -60,7 +60,7 @@ router.get('/:id', async (req, res)=>{
     }
 })
 
-//Login de usuário
+//Daniel: login de usuário
 router.post("/login", async (req, res)=>{
     const cpf = req.body.cpf;
     const password = req.body.password
@@ -86,10 +86,9 @@ router.post("/login", async (req, res)=>{
     }
 })
 
-
 //Daniel: atualiza Cadastro
 router.put('/:id', async (req, res)=>{
-    //alterar para PersonCPF ou algo assim
+
     const id = req.body.cpf
     const {name, cpf, accountValue, password} = req.body
     console.log("id",id)
@@ -105,10 +104,6 @@ router.put('/:id', async (req, res)=>{
     try{
         
         await Person.updateOne({cpf:id},person)
-        // if(updatedPerson.matchedCount === 0){
-        //     res.status(422).json({message:"Atualização não aconteceu AGORA"})
-        //     return
-        // }
 
         res.status(200).json({message:"Atualização realizada com sucesso!"})
 

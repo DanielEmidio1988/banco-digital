@@ -7,29 +7,29 @@ import { GlobalContext } from '../../context/GlobalContext'
 
 function RegisterPage() {
   const context = useContext(GlobalContext)
-  const {accountUser, isLoading, setIsLoading, onChangeForm} = context
   const navigate = useNavigate()
   const [validatePassword, setValidatePassword] = useState("")
 
   //Daniel: Função para cadastrar nova conta, será chamada apenas se não houver CPF duplicado, conforme função "checkDuplicate"
   const signup = async (event)  => {
     const body ={
-      name: accountUser.name,
-      cpf: accountUser.cpf,
-      password: accountUser.password,
-      accountValue: accountUser.accountValue,
+      name: context.accountUser.name,
+      cpf: context.accountUser.cpf,
+      password: context.accountUser.password,
+      accountValue: context.accountUser.accountValue,
     }
 
     try{
       await axios.post(`${BASE_URL}/user/signup`,body)
       alert(`Conta cadastrada com sucesso!`)
-      setIsLoading(false)
+      context.setAccountUser({})
+      context.setIsLoading(false)
       goToLoginPage(navigate)
     }catch(error){
         alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
         console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
         console.log('Detalhes: ',error)
-        setIsLoading(false)
+        context.setIsLoading(false)
     }
   }
 
@@ -38,25 +38,25 @@ function RegisterPage() {
     event.preventDefault()
 
     const body ={
-      name: accountUser.name,
-      cpf: accountUser.cpf,
-      password: accountUser.password,
-      accountValue: accountUser.accountValue,
+      name: context.accountUser.name,
+      cpf: context.accountUser.cpf,
+      password: context.accountUser.password,
+      accountValue: context.accountUser.accountValue,
     }
     try{
 
-      setIsLoading(true)
+      context.setIsLoading(true)
 
       //Daniel: função para validar se ambas as senhas conferem.
-      if(validatePassword !== accountUser.password){
+      if(validatePassword !== context.accountUser.password){
         alert(`Senha não confere!`)
-        setIsLoading(false)
+        context.setIsLoading(false)
         return  
       }
 
       await axios.get(`${BASE_URL}/user/${body.cpf}`)
       alert(`CPF já cadastrado na Base de Dados!`)
-      setIsLoading(false)
+      context.setIsLoading(false)
     
     return
     }catch(error){
@@ -64,7 +64,7 @@ function RegisterPage() {
         alert(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
         console.log(`Erro de conexão com a base de dados nº ${error.response.status}.\nTipo não mapeado. Favor verificar!`)
         console.log('Detalhes: ',error)
-        setIsLoading(false)}
+        context.setIsLoading(false)}
         else{
           signup()
         }
@@ -109,8 +109,8 @@ function RegisterPage() {
                           type="text"
                           name="name"
                           id="name"
-                          value={accountUser.name}
-                          onChange={onChangeForm}
+                          value={context.accountUser.name}
+                          onChange={context.onChangeForm}
                           required
                           autoComplete="off"
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -125,8 +125,8 @@ function RegisterPage() {
                           type="text"
                           name="cpf"
                           id="cpf"
-                          value={accountUser.cpf}
-                          onChange={onChangeForm}
+                          value={context.accountUser.cpf}
+                          onChange={context.onChangeForm}
                           required
                           autoComplete="off"
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -142,8 +142,8 @@ function RegisterPage() {
                           type="password"
                           name="password"
                           id="password"
-                          value={accountUser.password}
-                          onChange={onChangeForm}
+                          value={context.accountUser.password}
+                          onChange={context.onChangeForm}
                           required
                           autoComplete="off"
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -175,7 +175,7 @@ function RegisterPage() {
                       onClick={checkDuplicate} 
                       className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                      {isLoading ? 'Carregando...':'Cadastrar'}
+                      {context.isLoading ? 'Carregando...':'Cadastrar'}
                     </button>
 
                     

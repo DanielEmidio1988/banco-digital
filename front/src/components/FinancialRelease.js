@@ -16,9 +16,15 @@ function FinancialRelease(props){
     }else{
         const financialValueAux = parseInt(props.financialValue)
         props.setFinancialValue(financialValueAux) 
-        props.goToPage(navigate)
+        props.goToPage(navigate, props.accountUser.cpf)
     }
 } 
+
+  const backToHome = (event)=>{
+    event.preventDefault()
+    props.setFinancialValue(0)
+    props.goToBackPage(navigate)
+  }
 
     return(
     <>
@@ -57,6 +63,14 @@ function FinancialRelease(props){
                     </div>
                   </div>
                   <div className="bg-gray-50 px-4 py-3 sm:px-6">
+
+                  <button
+                      onClick={backToHome}
+                      type="submit"
+                      className="mr-20 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-12 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                      Voltar
+                    </button>
                     
                     <button
                       onClick={confirmOperationTransaction}
