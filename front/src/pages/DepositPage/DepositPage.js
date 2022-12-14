@@ -7,8 +7,7 @@ import { useContext } from 'react'
 function DepositPage (){
   const financialOperation = "depositado"
   const context = useContext(GlobalContext)
-  const {financialValue, setFinancialValue} = context
-  const taxaOperacional = 0 //Aplicavel somente em caso de atualização da negociação de taxas
+  const {financialValue, setFinancialValue, accountUser} = context
 
     return(
         <>
@@ -17,7 +16,8 @@ function DepositPage (){
         financialOperation={financialOperation}
         goToPage={goToDepositDetailsPage}
         financialValue={financialValue}
-        setFinancialValue={setFinancialValue}/>
+        setFinancialValue={setFinancialValue}
+        accountUser={accountUser}/>
         </>
     )
 }

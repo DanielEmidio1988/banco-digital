@@ -1,22 +1,12 @@
 import { useNavigate } from "react-router-dom"
-// import { LockClosedIcon } from '@heroicons/react/20/solid'
-import axios from 'axios'
-import { useContext, useEffect } from 'react'
-import { BASE_URL } from '../constants/url'
-import { goToHomePage, goToRegisterPage } from '../routes/coordinator'
-import { GlobalContext } from '../context/GlobalContext'
 
 function FinancialRelease(props){
 
-  const context = useContext(GlobalContext)
-  const {accountUser, setIsLoading} = context
   const navigate = useNavigate()
 
-
+  //Daniel: função para validação dos valores de transação informado pelo cliente/usuário
   const confirmOperationTransaction = async (event)=>{ 
     event.preventDefault()
-    try{
-      setIsLoading(true)
     if(props.financialValue > 2000){
         alert(`Valor informado acima limite cadastrado!\nFavor, informar um novo valor.`)
     }else if(props.financialValue === 0){
@@ -24,13 +14,10 @@ function FinancialRelease(props){
     }else if(props.financialValue < 0){
         alert(`Favor, informe um valor válido`)
     }else{
+        const financialValueAux = parseInt(props.financialValue)
+        props.setFinancialValue(financialValueAux) 
         props.goToPage(navigate)
-        setIsLoading(false)
     }
-  }catch(error){
-    console.log(error)
-    setIsLoading(false)
-  }
 } 
 
     return(
@@ -39,7 +26,7 @@ function FinancialRelease(props){
           <div className="py-5">
             <div className="border-t border-gray-200" />
             <h2 className="text-lg font-medium leading-6 text-gray-900">Qual o valor a ser {props.financialOperation}?</h2>
-                <p className="mt-1 text-sm text-gray-600">Saldo R$ {accountUser.accountValue}</p>
+                <p className="mt-1 text-sm text-gray-600">Saldo disponível em conta <b>R$ {props.accountUser.accountValue.toFixed(2)}</b></p>
           </div>
         </div>
   

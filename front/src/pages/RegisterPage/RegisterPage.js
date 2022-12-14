@@ -13,7 +13,6 @@ function RegisterPage() {
 
   //Daniel: Função para cadastrar nova conta, será chamada apenas se não houver CPF duplicado, conforme função "checkDuplicate"
   const signup = async (event)  => {
-    // event.preventDefault()
     const body ={
       name: accountUser.name,
       cpf: accountUser.cpf,

@@ -1,13 +1,13 @@
 import Router from "./routes/Router"
 import React, { useState, useEffect} from "react";
 import { GlobalContext } from "./context/GlobalContext";
-import { useForm } from "./components/useForm";
+
 
 function App() {
 
   //Daniel: accountUser que será utilizado para armazenar os dados do cliente
-  const [accountUser, onChangeForm] = useForm({name:"",cpf:"",password:"",accountValue:0})
-    
+  const [accountUser, setAccountUser] = useState({name:"",cpf:"",password:"",accountValue:0})
+  
   //Daniel: isLoading será utilizada para status de carregamento (loading) de requisições da Base de Dados
   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,8 +26,13 @@ function App() {
       }
   }, [])
 
+  const onChangeForm = (event) =>{
+    setAccountUser({...accountUser, [event.target.name]:event.target.value})
+  }
+
   const context ={
     accountUser,
+    setAccountUser,
     isLoading,
     setIsLoading,
     onChangeForm,
@@ -43,7 +48,6 @@ function App() {
     <Router/>
     </GlobalContext.Provider>
     </>
-
   );
 }
 

@@ -21,7 +21,7 @@ export const MenuOptions = styled.div`
 
     p:hover{
         cursor: pointer;
-        color: orangered;
+        color: #4F46E5;
         width: 96%;
         border-radius: 8px;
     }    
@@ -39,7 +39,7 @@ export const MainDisplay = styled.div`
     h1{
         font-size: 30px;
         margin-bottom: 20px;
-        color: orangered;
+        color: #4F46E5;
     }
 
     div:first-child{
@@ -49,7 +49,7 @@ export const MainDisplay = styled.div`
     h3{
         font-size: 20px;
         margin-bottom: 10px;
-        color: orangered;
+        color: #4F46E5;
         font-weight: bold;
     }
 
@@ -74,7 +74,7 @@ export const MainFinancial = styled.div`
     } 
     
     a{
-        color: orangered;
+        color: #4F46E5;
     }
     
 `

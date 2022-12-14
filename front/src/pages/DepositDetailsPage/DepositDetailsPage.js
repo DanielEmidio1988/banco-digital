@@ -8,28 +8,44 @@ import { GlobalContext } from '../../context/GlobalContext'
 
 function DepositDetailsPage (){
     const context = useContext(GlobalContext)
-    const {accountUser, isLoading, setIsLoading, onChangeForm, financialValue, setFinancialValue} = context
+    const {accountUser, setAccountUser, isLoading, setIsLoading, financialValue, setFinancialValue} = context
     const navigate = useNavigate()
     const newValue = financialValue + accountUser.accountValue
 
+
+    // financialValue > 0? setNewValue(financialValue + accountUser.accountValue):0
+
     const confirmTransaction = async (event)=>{
       event.preventDefault()
+
+
       try{
+
         setIsLoading(true)
-      const body = {
-        accountValue: accountUser.accountValue
-      }
-      const response = await axios.patch(`${BASE_URL}/user/${accountUser.cpf}`,body)
-      window.localStorage.setItem("tokenBancoDigital", response.data.token)
-      alert(`Operação concluida com sucesso!`)
-      setFinancialValue(0)
-      setIsLoading(false)
-      goToHomePage(navigate)
-    }catch(error){
+        const body = {
+          name: accountUser.name,
+          cpf: accountUser.cpf,
+          password: accountUser.password,
+          accountValue: newValue
+        }
+
+        const response = await axios.put(`${BASE_URL}/user/${accountUser.cpf}`,body)
+        // window.localStorage.setItem("tokenBancoDigital", response.data.token)
+        alert(`Operação concluida com sucesso!`)
+        console.log("body.accountValue",body)
+        console.log("newValue",newValue)
+        console.log('response',response)
+        setFinancialValue(0)
+        // setAccountUser(response.data)
+        setIsLoading(false)
+        goToHomePage(navigate)
+      }catch(error){
         console.log(error)
         setIsLoading(false)
     }
     }
+
+    // financialValue + accountUser.accountValue
 
     return(
         <>
