@@ -23,9 +23,11 @@ Este projeto foi desenvolvido com o propósito de simular a administração de u
 ![Git](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
 
 ## ⚒️ Livrarias Utilizadas
+Para rodar o projeto localmente, instalar o node.js e o mongoDB executando na porta 3001.
 
 ### Todo Sistema
-- npm install
+- npm install: Para instalação;
+- npm start: Para execução, na pasta back e front separadamentes.
 
 ### Front-End
 - npm install styled-components
@@ -40,8 +42,8 @@ Este projeto foi desenvolvido com o propósito de simular a administração de u
 - npm install nodemon
 - npm install mongoose
 
-![Node.JS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-![Javascript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+
+
 
 ## 📫 Contato
 
